@@ -1,6 +1,7 @@
 package com.example.umc9th.domain.mission.entity;
 
 
+import com.example.umc9th.domain.member.entity.Food;
 import com.example.umc9th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,4 +25,12 @@ public class Store extends BaseEntity {
 
     @Column(name = "boss_number",nullable = false)
     private Long bossNumber;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "district_id")
+    private District district;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "food_id")
+    private Food food;
 }
