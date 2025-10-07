@@ -6,6 +6,9 @@ import com.example.umc9th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,5 +34,10 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
+    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
+    private List<ReviewPhoto> reviewPhotoList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
+    private List<ReviewReply> reviewReplyList = new ArrayList<>();
 
 }
