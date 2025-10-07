@@ -16,11 +16,11 @@ public class Term {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     @Enumerated(EnumType.STRING)
     private TermName name;
 
-    @Column(name = "type")
+    @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     private TermType type;
 }
