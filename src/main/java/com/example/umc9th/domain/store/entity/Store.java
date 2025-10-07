@@ -1,4 +1,4 @@
-package com.example.umc9th.domain.mission.entity;
+package com.example.umc9th.domain.store.entity;
 
 
 import com.example.umc9th.domain.member.entity.Food;
