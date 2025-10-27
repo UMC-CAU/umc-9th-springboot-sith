@@ -1,5 +1,5 @@
 package com.example.umc9th.domain.member.enums;
 
 public enum TermType {
-    REQUIRED,OPTIONAL
+    REQUIRED, OPTIONAL
 }
