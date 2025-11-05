@@ -12,5 +12,5 @@ public class SelectedMissionsInfo {
     private String storeName;
     private String missionDescription;
     private Integer point;
-    private Boolean is_completed;
+    private Boolean isCompleted;
 }
