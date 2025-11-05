@@ -48,6 +48,9 @@ public class Member extends BaseEntity {
     @Builder.Default
     private String profileUrl = "/images/default_profile.png";
 
+    @Column(name = "nickname",nullable = false)
+    private String nickname;
+
     @Column(name = "point",nullable = false)
     @Builder.Default
     private int point = 0;

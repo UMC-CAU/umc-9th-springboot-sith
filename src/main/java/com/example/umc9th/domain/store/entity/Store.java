@@ -24,7 +24,7 @@ public class Store extends BaseEntity {
     private String detailAddress;
 
     @Column(name = "boss_number",nullable = false)
-    private Long bossNumber;
+    private String bossNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "district_id")
