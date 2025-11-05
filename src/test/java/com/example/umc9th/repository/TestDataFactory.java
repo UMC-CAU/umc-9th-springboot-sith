@@ -49,7 +49,7 @@ public class TestDataFactory {
     }
     public static Store createStore(District district, int index) {
         return Store.builder()
-                .name("Store " + index)
+                .name("Store" + index)
                 .bossNumber("OWN-" + String.format("%04d", index))
                 .detailAddress("Seoul Street " + index)
                 .district(district)
