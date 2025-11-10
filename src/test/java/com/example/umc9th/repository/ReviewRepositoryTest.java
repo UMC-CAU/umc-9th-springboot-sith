@@ -5,7 +5,6 @@ import com.example.umc9th.domain.review.dto.ReviewInfo;
 import com.example.umc9th.domain.review.entity.Review;
 import com.example.umc9th.domain.review.entity.ReviewPhoto;
 import com.example.umc9th.domain.review.entity.ReviewReply;
-import com.example.umc9th.domain.review.repository.ReviewRepository;
 import com.example.umc9th.domain.review.service.ReviewService;
 import com.example.umc9th.domain.store.entity.District;
 import com.example.umc9th.domain.store.entity.Store;
@@ -28,14 +27,11 @@ import static org.assertj.core.api.Assertions.*;
 public class ReviewRepositoryTest {
 
     @Autowired
-    private ReviewRepository reviewRepository;
-    @Autowired
     private EntityManager em;
     @Autowired
     private ReviewService reviewService;
 
     Long targetMemberId;
-    Long targetReviewId;
 
     @BeforeEach
     void setup(){
@@ -57,10 +53,10 @@ public class ReviewRepositoryTest {
 
         Review review = TestDataFactory.createReview(member,store1,0); // rating 0.5
         em.persist(review);
-        targetReviewId = review.getId();
+
+        ReviewReply reply = TestDataFactory.createReviewReply(review,0);
+        em.persist(reply);
         for(int i=0;i<3;i++){
-            ReviewReply reply = TestDataFactory.createReviewReply(review,i);
-            em.persist(reply);
             ReviewPhoto photo = TestDataFactory.createReviewPhoto(review,i);
             em.persist(photo);
         }
@@ -97,9 +93,6 @@ public class ReviewRepositoryTest {
         assertThat(result.get(1).getStoreName()).isEqualTo("Store2");
         assertThat(result.get(0).getRating()).isEqualTo(0.5);
         assertThat(result.get(1).getRating()).isEqualTo(0.5);
-
-        List<ReviewReply> replies = reviewRepository.findReviewRepliesByReviewId(targetReviewId);
-        assertThat(replies).hasSize(3);
 
     }
 
