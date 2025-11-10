@@ -16,5 +16,6 @@ public class ReviewInfo {
     private double rating;
     private String content;
     private List<String> photoUrls;
+    private ReviewReplyInfo reply;
     private LocalDateTime updatedAt;
 }
