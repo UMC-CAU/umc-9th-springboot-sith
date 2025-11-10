@@ -5,6 +5,8 @@ import com.example.umc9th.domain.member.enums.Gender;
 import com.example.umc9th.domain.mission.entity.Mission;
 import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
 import com.example.umc9th.domain.review.entity.Review;
+import com.example.umc9th.domain.review.entity.ReviewPhoto;
+import com.example.umc9th.domain.review.entity.ReviewReply;
 import com.example.umc9th.domain.store.entity.District;
 import com.example.umc9th.domain.store.entity.Store;
 
@@ -49,7 +51,7 @@ public class TestDataFactory {
     }
     public static Store createStore(District district, int index) {
         return Store.builder()
-                .name("Store " + index)
+                .name("Store" + index)
                 .bossNumber("OWN-" + String.format("%04d", index))
                 .detailAddress("Seoul Street " + index)
                 .district(district)
@@ -58,6 +60,18 @@ public class TestDataFactory {
     public static District createDistrict(String name) {
         return District.builder()
                 .name(name)
+                .build();
+    }
+    public static ReviewReply createReviewReply(Review review, int index) {
+        return ReviewReply.builder()
+                .content("reply comment " + index)
+                .review(review)
+                .build();
+    }
+    public static ReviewPhoto createReviewPhoto(Review review, int index) {
+        return ReviewPhoto.builder()
+                .photoUrl("https://test.image/" + index)
+                .review(review)
                 .build();
     }
 }
