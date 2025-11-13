@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SelectedMissionsInfo {
+public class SelectedMissionInfo {
     private Long memberMissionId;
     private String storeName;
     private String missionDescription;
