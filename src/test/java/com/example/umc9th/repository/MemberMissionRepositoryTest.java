@@ -1,7 +1,7 @@
 package com.example.umc9th.repository;
 
 import com.example.umc9th.domain.member.entity.Member;
-import com.example.umc9th.domain.mission.dto.SelectedMissionsInfo;
+import com.example.umc9th.domain.mission.dto.SelectedMissionInfo;
 import com.example.umc9th.domain.mission.dto.UnselectedMissionInfo;
 import com.example.umc9th.domain.mission.entity.Mission;
 import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
@@ -116,18 +116,18 @@ public class MemberMissionRepositoryTest {
     @DisplayName("현재 진행중, 진행완료한 미션들")
     void test3(){
         int pageSize = 3;
-        List<SelectedMissionsInfo> page1 = memberMissionRepository.findSelectedMissionsWithCursor(
+        List<SelectedMissionInfo> page1 = memberMissionRepository.findSelectedMissionsWithCursor(
                 targetMemberId,null,true,pageSize);
         assertThat(page1).hasSize(3);
         assertThat(page1.get(0).getPoint()).isEqualTo(40);
         assertThat(page1.get(2).getPoint()).isEqualTo(20);
 
-        SelectedMissionsInfo lastMission = page1.get(pageSize-1);
+        SelectedMissionInfo lastMission = page1.get(pageSize-1);
         String lastPoint = String.format("%010d",lastMission.getPoint());
         String lastId = String.format("%010d",lastMission.getMemberMissionId());
         String cursor = lastPoint + lastId;
 
-        List<SelectedMissionsInfo> page2 = memberMissionRepository.findSelectedMissionsWithCursor(
+        List<SelectedMissionInfo> page2 = memberMissionRepository.findSelectedMissionsWithCursor(
                 targetMemberId,cursor,true,pageSize);
         assertThat(page2).hasSize(2);
         assertThat(page2.get(0).getPoint()).isEqualTo(10);
