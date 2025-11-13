@@ -1,31 +1,36 @@
 package com.example.umc9th.domain.mission.repository;
 
-import com.example.umc9th.domain.mission.dto.SelectedMissionsInfo;
+import com.example.umc9th.domain.member.repository.MemberRepository;
+import com.example.umc9th.domain.mission.dto.SelectedMissionInfo;
 import com.example.umc9th.domain.mission.dto.UnselectedMissionInfo;
 import com.example.umc9th.domain.mission.entity.QMission;
 import com.example.umc9th.domain.mission.entity.mapping.QMemberMission;
+import com.example.umc9th.domain.mission.exception.MissionException;
+import com.example.umc9th.domain.mission.exception.code.MissionErrorCode;
 import com.example.umc9th.domain.store.entity.QDistrict;
 import com.example.umc9th.domain.store.entity.QStore;
+import com.example.umc9th.domain.store.repository.DistrictRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class MemberMissionRepositoryImpl implements MemberMissionRepositoryCustom{
 
 
     private final JPAQueryFactory jpaQueryFactory;
-
-    public MemberMissionRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
-        this.jpaQueryFactory = jpaQueryFactory;
-    }
+    private final MemberRepository memberRepository;
+//    private final DistrictRepository districtRepository;
 
     @Override
-    public List<SelectedMissionsInfo> findSelectedMissionsWithCursor(Long memberId, String cursor, boolean isCompleted,int pageSize) {
+    public List<SelectedMissionInfo> findSelectedMissionsWithCursor(Long memberId, String cursor, Boolean isCompleted, Integer pageSize) {
+        memberRepository.findById(memberId).orElseThrow(()->new MissionException(MissionErrorCode.NO_MEMBER));
 
         QMemberMission mm = QMemberMission.memberMission;
         QMission m = QMission.mission;
@@ -34,11 +39,11 @@ public class MemberMissionRepositoryImpl implements MemberMissionRepositoryCusto
         StringExpression cursorValue = StringExpressions.lpad(m.point.stringValue(),10,'0')
                 .concat(StringExpressions.lpad(mm.id.stringValue(),10,'0'));
 
-        List<SelectedMissionsInfo> result = jpaQueryFactory.select(Projections.constructor(SelectedMissionsInfo.class,
+        List<SelectedMissionInfo> result = jpaQueryFactory.select(Projections.constructor(SelectedMissionInfo.class,
                 mm.id.as("memberMissionId"), s.name.as("storeName"), m.description.as("missionDescription"), m.point.as("point"),
                 mm.isCompleted.as("is_completed")))
                 .from(mm).join(mm.mission,m).join(m.store,s)
-                .where(mm.member.id.eq(memberId).and(cursor !=null ? cursorValue.lt(cursor):null).and(mm.isCompleted.eq(isCompleted)))
+                .where(mm.member.id.eq(memberId).and(cursor != null ? cursorValue.lt(cursor):null).and(mm.isCompleted.eq(isCompleted)))
                 .orderBy(m.point.desc(),mm.id.desc())
                 .limit(pageSize)
                 .fetch();
@@ -47,6 +52,8 @@ public class MemberMissionRepositoryImpl implements MemberMissionRepositoryCusto
 
     @Override
     public Long findCompletedMissionCountByDistrict(Long memberId,String district) {
+        memberRepository.findById(memberId).orElseThrow(()->new MissionException(MissionErrorCode.NO_MEMBER));
+//        districtRepository.findByName(district).orElseThrow(()->new MissionException(MissionErrorCode.NO_DISTRICT));
         QMemberMission mm = QMemberMission.memberMission;
         QMission m = QMission.mission;
         QStore s = QStore.store;
@@ -60,7 +67,9 @@ public class MemberMissionRepositoryImpl implements MemberMissionRepositoryCusto
     }
 
     @Override
-    public List<UnselectedMissionInfo> findUnselectedMissionsByDistrictWithCursor(Long memberId, String cursor, String district, int pageSize) {
+    public List<UnselectedMissionInfo> findUnselectedMissionsByDistrictWithCursor(Long memberId, String cursor, String district, Integer pageSize) {
+        memberRepository.findById(memberId).orElseThrow(()->new MissionException(MissionErrorCode.NO_MEMBER));
+//        districtRepository.findByName(district).orElseThrow(()->new MissionException(MissionErrorCode.NO_DISTRICT));
         QMemberMission mm = QMemberMission.memberMission;
         QMission m = QMission.mission;
         QStore s = QStore.store;
