@@ -1,6 +1,7 @@
 package com.example.umc9th.domain.review.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ReviewInfo {
     private Long reviewId;
     private String storeName;
