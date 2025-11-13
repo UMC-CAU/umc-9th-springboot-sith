@@ -5,7 +5,7 @@ import com.example.umc9th.domain.review.dto.ReviewInfo;
 import com.example.umc9th.domain.review.entity.Review;
 import com.example.umc9th.domain.review.entity.ReviewPhoto;
 import com.example.umc9th.domain.review.entity.ReviewReply;
-import com.example.umc9th.domain.review.service.ReviewService;
+import com.example.umc9th.domain.review.service.query.ReviewQueryService;
 import com.example.umc9th.domain.store.entity.District;
 import com.example.umc9th.domain.store.entity.Store;
 import jakarta.persistence.EntityManager;
@@ -23,13 +23,13 @@ import static org.assertj.core.api.Assertions.*;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
-@Import({TestConfig.class, ReviewService.class})
-public class ReviewRepositoryTest {
+@Import({TestConfig.class, ReviewQueryService.class})
+public class ReviewListRepositoryTest {
 
     @Autowired
     private EntityManager em;
     @Autowired
-    private ReviewService reviewService;
+    private ReviewQueryService reviewQueryService;
 
     Long targetMemberId;
 
@@ -76,7 +76,7 @@ public class ReviewRepositoryTest {
     @DisplayName("내가 작성한 리뷰 장소 별 보기")
     void test(){
 
-        List<ReviewInfo> result = reviewService.findMyReviews(targetMemberId,"Store1","store");
+        List<ReviewInfo> result = reviewQueryService.findMyReviews(targetMemberId,"Store1","store");
         assertThat(result).hasSize(5);
         assertThat(result.get(0).getStoreName()).isEqualTo("Store1");
         assertThat(result.get(4).getStoreName()).isEqualTo("Store1");
@@ -85,7 +85,7 @@ public class ReviewRepositoryTest {
     @DisplayName("내가 작성한 리뷰 별점 별 보기")
     void test1(){
 
-        List<ReviewInfo> result = reviewService.findMyReviews(targetMemberId,"0","rating");
+        List<ReviewInfo> result = reviewQueryService.findMyReviews(targetMemberId,"0","rating");
         assertThat(result).hasSize(2);
         assertThat(result.get(0).getPhotoUrls()).hasSize(3);
         assertThat(result.get(1).getPhotoUrls()).hasSize(0);
