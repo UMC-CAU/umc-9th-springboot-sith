@@ -1,5 +1,6 @@
 package com.example.umc9th.domain.review.service.query;
 
+import com.example.umc9th.domain.member.repository.MemberRepository;
 import com.example.umc9th.domain.review.dto.ReviewInfo;
 import com.example.umc9th.domain.review.entity.QReview;
 import com.example.umc9th.domain.review.exception.ReviewException;
@@ -16,8 +17,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewQueryServiceImpl implements ReviewQueryService {
     private final ReviewRepository reviewRepository;
+    private final MemberRepository memberRepository;
 
     public List<ReviewInfo> findMyReviews(Long memberId, String query, String type){
+
+        memberRepository.findById(memberId).orElseThrow(()->new ReviewException(ReviewErrorCode.NO_MEMBER));
+
         QStore s = QStore.store;
         QReview r = QReview.review;
 
