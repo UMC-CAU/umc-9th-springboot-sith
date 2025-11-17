@@ -25,11 +25,9 @@ import static com.querydsl.core.group.GroupBy.list;
 public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-    private final MemberRepository memberRepository;
 
     @Override
     public List<ReviewInfo> findMyReviews(Long memberId,Predicate predicate) {
-        memberRepository.findById(memberId).orElseThrow(()->new ReviewException(ReviewErrorCode.NO_MEMBER));
 
         QReview r = QReview.review;
         QStore s = QStore.store;
