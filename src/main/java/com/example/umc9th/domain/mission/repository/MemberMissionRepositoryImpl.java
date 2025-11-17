@@ -1,15 +1,11 @@
 package com.example.umc9th.domain.mission.repository;
 
-import com.example.umc9th.domain.member.repository.MemberRepository;
 import com.example.umc9th.domain.mission.dto.SelectedMissionInfo;
 import com.example.umc9th.domain.mission.dto.UnselectedMissionInfo;
 import com.example.umc9th.domain.mission.entity.QMission;
 import com.example.umc9th.domain.mission.entity.mapping.QMemberMission;
-import com.example.umc9th.domain.mission.exception.MissionException;
-import com.example.umc9th.domain.mission.exception.code.MissionErrorCode;
 import com.example.umc9th.domain.store.entity.QDistrict;
 import com.example.umc9th.domain.store.entity.QStore;
-import com.example.umc9th.domain.store.repository.DistrictRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringExpressions;

@@ -1,13 +1,10 @@
 package com.example.umc9th.domain.review.repository;
 
-import com.example.umc9th.domain.member.repository.MemberRepository;
 import com.example.umc9th.domain.review.dto.ReviewInfo;
 import com.example.umc9th.domain.review.dto.ReviewReplyInfo;
 import com.example.umc9th.domain.review.entity.QReview;
 import com.example.umc9th.domain.review.entity.QReviewPhoto;
 import com.example.umc9th.domain.review.entity.QReviewReply;
-import com.example.umc9th.domain.review.exception.ReviewException;
-import com.example.umc9th.domain.review.exception.code.ReviewErrorCode;
 import com.example.umc9th.domain.store.entity.QStore;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
