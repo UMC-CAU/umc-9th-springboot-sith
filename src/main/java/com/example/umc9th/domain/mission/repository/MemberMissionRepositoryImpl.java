@@ -25,12 +25,9 @@ public class MemberMissionRepositoryImpl implements MemberMissionRepositoryCusto
 
 
     private final JPAQueryFactory jpaQueryFactory;
-    private final MemberRepository memberRepository;
-//    private final DistrictRepository districtRepository;
 
     @Override
     public List<SelectedMissionInfo> findSelectedMissionsWithCursor(Long memberId, String cursor, Boolean isCompleted, Integer pageSize) {
-        memberRepository.findById(memberId).orElseThrow(()->new MissionException(MissionErrorCode.NO_MEMBER));
 
         QMemberMission mm = QMemberMission.memberMission;
         QMission m = QMission.mission;
@@ -52,8 +49,7 @@ public class MemberMissionRepositoryImpl implements MemberMissionRepositoryCusto
 
     @Override
     public Long findCompletedMissionCountByDistrict(Long memberId,String district) {
-        memberRepository.findById(memberId).orElseThrow(()->new MissionException(MissionErrorCode.NO_MEMBER));
-//        districtRepository.findByName(district).orElseThrow(()->new MissionException(MissionErrorCode.NO_DISTRICT));
+
         QMemberMission mm = QMemberMission.memberMission;
         QMission m = QMission.mission;
         QStore s = QStore.store;
@@ -68,8 +64,7 @@ public class MemberMissionRepositoryImpl implements MemberMissionRepositoryCusto
 
     @Override
     public List<UnselectedMissionInfo> findUnselectedMissionsByDistrictWithCursor(Long memberId, String cursor, String district, Integer pageSize) {
-        memberRepository.findById(memberId).orElseThrow(()->new MissionException(MissionErrorCode.NO_MEMBER));
-//        districtRepository.findByName(district).orElseThrow(()->new MissionException(MissionErrorCode.NO_DISTRICT));
+
         QMemberMission mm = QMemberMission.memberMission;
         QMission m = QMission.mission;
         QStore s = QStore.store;
@@ -85,7 +80,6 @@ public class MemberMissionRepositoryImpl implements MemberMissionRepositoryCusto
                 .where(d.name.eq(district).and(mm.id.isNull()).and(cursor !=null ? cursorValue.lt(cursor):null))
                 .orderBy(m.point.desc(),m.id.desc())
                 .limit(pageSize).fetch();
-
 
         return result;
     }
