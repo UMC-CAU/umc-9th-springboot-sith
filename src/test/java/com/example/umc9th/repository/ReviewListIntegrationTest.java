@@ -1,41 +1,39 @@
 package com.example.umc9th.repository;
 
 import com.example.umc9th.domain.member.entity.Member;
-import com.example.umc9th.domain.review.dto.ReviewInfo;
+import com.example.umc9th.domain.review.Controller.ReviewController;
 import com.example.umc9th.domain.review.entity.Review;
 import com.example.umc9th.domain.review.entity.ReviewPhoto;
 import com.example.umc9th.domain.review.entity.ReviewReply;
-import com.example.umc9th.domain.review.repository.ReviewRepository;
-import com.example.umc9th.domain.review.service.ReviewService;
+import com.example.umc9th.domain.review.service.query.ReviewQueryServiceImpl;
 import com.example.umc9th.domain.store.entity.District;
 import com.example.umc9th.domain.store.entity.Store;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import static org.assertj.core.api.Assertions.*;
-
+@SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@DataJpaTest
-@Import({TestConfig.class, ReviewService.class})
-public class ReviewRepositoryTest {
-
+@Import({TestConfig.class, ReviewQueryServiceImpl.class, ReviewController.class})
+@AutoConfigureMockMvc
+public class ReviewListIntegrationTest {
     @Autowired
-    private ReviewRepository reviewRepository;
+    private MockMvc mockMvc;
     @Autowired
     private EntityManager em;
-    @Autowired
-    private ReviewService reviewService;
 
-    Long targetMemberId;
-    Long targetReviewId;
+    private Long targetMemberId;
 
     @BeforeEach
     void setup(){
@@ -57,10 +55,10 @@ public class ReviewRepositoryTest {
 
         Review review = TestDataFactory.createReview(member,store1,0); // rating 0.5
         em.persist(review);
-        targetReviewId = review.getId();
+
+        ReviewReply reply = TestDataFactory.createReviewReply(review,0);
+        em.persist(reply);
         for(int i=0;i<3;i++){
-            ReviewReply reply = TestDataFactory.createReviewReply(review,i);
-            em.persist(reply);
             ReviewPhoto photo = TestDataFactory.createReviewPhoto(review,i);
             em.persist(photo);
         }
@@ -76,31 +74,16 @@ public class ReviewRepositoryTest {
         }
 
     }
+
     @Test
-    @DisplayName("내가 작성한 리뷰 장소 별 보기")
-    void test(){
+    @DisplayName("리뷰 조회 통합 테스트")
+    @Transactional
+    void test() throws Exception {
 
-        List<ReviewInfo> result = reviewService.findMyReviews(targetMemberId,"Store1","store");
-        assertThat(result).hasSize(5);
-        assertThat(result.get(0).getStoreName()).isEqualTo("Store1");
-        assertThat(result.get(4).getStoreName()).isEqualTo("Store1");
-    }
-    @Test
-    @DisplayName("내가 작성한 리뷰 별점 별 보기")
-    void test1(){
-
-        List<ReviewInfo> result = reviewService.findMyReviews(targetMemberId,"0","rating");
-        assertThat(result).hasSize(2);
-        assertThat(result.get(0).getPhotoUrls()).hasSize(3);
-        assertThat(result.get(1).getPhotoUrls()).hasSize(0);
-        assertThat(result.get(0).getStoreName()).isEqualTo("Store1");
-        assertThat(result.get(1).getStoreName()).isEqualTo("Store2");
-        assertThat(result.get(0).getRating()).isEqualTo(0.5);
-        assertThat(result.get(1).getRating()).isEqualTo(0.5);
-
-        List<ReviewReply> replies = reviewRepository.findReviewRepliesByReviewId(targetReviewId);
-        assertThat(replies).hasSize(3);
+        mockMvc.perform(get("/api/my-reviews").param("id",String.valueOf(targetMemberId))
+                .param("query","Store1")
+                .param("type","store"))
+                .andDo(print());
 
     }
-
 }

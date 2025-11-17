@@ -18,7 +18,7 @@ public class ReviewReply extends BaseEntity {
     @Column(name = "content",nullable = false,length = 300)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
     private Review review;
 }

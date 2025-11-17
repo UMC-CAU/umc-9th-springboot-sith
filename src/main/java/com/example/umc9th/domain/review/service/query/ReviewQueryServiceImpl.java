@@ -1,7 +1,9 @@
-package com.example.umc9th.domain.review.service;
+package com.example.umc9th.domain.review.service.query;
 
 import com.example.umc9th.domain.review.dto.ReviewInfo;
 import com.example.umc9th.domain.review.entity.QReview;
+import com.example.umc9th.domain.review.exception.ReviewException;
+import com.example.umc9th.domain.review.exception.code.ReviewErrorCode;
 import com.example.umc9th.domain.review.repository.ReviewRepository;
 import com.example.umc9th.domain.store.entity.QStore;
 import com.querydsl.core.BooleanBuilder;
@@ -12,8 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ReviewService {
-
+public class ReviewQueryServiceImpl implements ReviewQueryService {
     private final ReviewRepository reviewRepository;
 
     public List<ReviewInfo> findMyReviews(Long memberId, String query, String type){
@@ -22,6 +23,8 @@ public class ReviewService {
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
+        if(!type.equals("store")&&!type.equals("rating")) throw new ReviewException(ReviewErrorCode.WRONG_TYPE);
+
         if(type.equals("store")){
             booleanBuilder.and(s.name.eq(query));
         }
@@ -29,7 +32,7 @@ public class ReviewService {
             booleanBuilder.and(r.rating.goe(Double.parseDouble(query))).and(r.rating.lt(Double.parseDouble(query)+1));
         }
 
-       List<ReviewInfo> myReviews = reviewRepository.findMyReviews(memberId,booleanBuilder);
+        List<ReviewInfo> myReviews = reviewRepository.findMyReviews(memberId,booleanBuilder);
 
         return myReviews;
     }
