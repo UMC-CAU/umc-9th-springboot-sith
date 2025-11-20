@@ -31,7 +31,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
         QReviewPhoto rp = QReviewPhoto.reviewPhoto;
         QReviewReply rr = QReviewReply.reviewReply;
 
-        List<ReviewInfo> result = jpaQueryFactory
+        return jpaQueryFactory
                 .from(r).join(r.store,s).leftJoin(rp).on(r.id.eq(rp.review.id)).leftJoin(rr).on(r.id.eq(rr.review.id))
                 .where(r.member.id.eq(memberId).and(predicate))
                 .transform(
@@ -42,6 +42,5 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                                 r.updatedAt
                         ))
                 );
-        return result;
     }
 }

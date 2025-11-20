@@ -1,5 +1,6 @@
 package com.example.umc9th.domain.review.service.query;
 
+import com.example.umc9th.domain.member.exception.code.MemberErrorCode;
 import com.example.umc9th.domain.member.repository.MemberRepository;
 import com.example.umc9th.domain.review.dto.ReviewInfo;
 import com.example.umc9th.domain.review.entity.QReview;
@@ -21,7 +22,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
     public List<ReviewInfo> findMyReviews(Long memberId, String query, String type){
 
-        memberRepository.findById(memberId).orElseThrow(()->new ReviewException(ReviewErrorCode.NO_MEMBER));
+        memberRepository.findById(memberId).orElseThrow(()->new ReviewException(MemberErrorCode.NO_MEMBER));
 
         QStore s = QStore.store;
         QReview r = QReview.review;
@@ -37,8 +38,6 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
             booleanBuilder.and(r.rating.goe(Double.parseDouble(query))).and(r.rating.lt(Double.parseDouble(query)+1));
         }
 
-        List<ReviewInfo> myReviews = reviewRepository.findMyReviews(memberId,booleanBuilder);
-
-        return myReviews;
+        return reviewRepository.findMyReviews(memberId,booleanBuilder);
     }
 }
