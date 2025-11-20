@@ -1,6 +1,8 @@
 package com.example.umc9th.repository;
 
+import com.example.umc9th.domain.member.entity.Food;
 import com.example.umc9th.domain.member.entity.Member;
+import com.example.umc9th.domain.member.enums.FoodName;
 import com.example.umc9th.domain.member.enums.Gender;
 import com.example.umc9th.domain.mission.entity.Mission;
 import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
@@ -10,6 +12,7 @@ import com.example.umc9th.domain.review.entity.ReviewReply;
 import com.example.umc9th.domain.store.entity.District;
 import com.example.umc9th.domain.store.entity.Store;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class TestDataFactory {
@@ -22,7 +25,8 @@ public class TestDataFactory {
                 .email("member" + index + "@test.com")         // nullable = false
                 .point(0)                                      // nullable = false
                 .phoneNumber("010-0000-" + String.format("%04d", index)) // nullable = true
-                .nickname("user" + index)                      // nullable = true
+                .nickname("user" + index)// nullable = true
+                .birth(LocalDate.now())
                 .build();
     }
 
@@ -72,6 +76,11 @@ public class TestDataFactory {
         return ReviewPhoto.builder()
                 .photoUrl("https://test.image/" + index)
                 .review(review)
+                .build();
+    }
+    public static Food createFood(FoodName name){
+        return Food.builder()
+                .name(name)
                 .build();
     }
 }
