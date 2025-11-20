@@ -4,9 +4,10 @@ import com.example.umc9th.domain.mission.dto.SelectedMissionInfo;
 import com.example.umc9th.domain.mission.dto.UnselectedMissionInfo;
 import lombok.Builder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-public class MemberMissionResDTO {
+public class MissionResDTO {
     @Builder
     public record SelectedMissionList(
             List<SelectedMissionInfo> missions,
@@ -16,4 +17,10 @@ public class MemberMissionResDTO {
             List<UnselectedMissionInfo> missions,
             Integer lastPoint, Long lastMissionId, Boolean hasNext
     ){}
+
+    @Builder
+    public record MissionRes(Long missionId, LocalDateTime createdAt){}
+
+    @Builder
+    public record MemberMissionRes(Long memberMissionId, LocalDateTime createdAt){}
 }

@@ -11,6 +11,7 @@ import com.example.umc9th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,9 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private Gender gender = Gender.UNKNOWN;
+
+    @Column(name ="birth",nullable = false)
+    private LocalDate birth;
 
     @Column(name = "phone_number", unique = true, length = 13)
     private String phoneNumber;

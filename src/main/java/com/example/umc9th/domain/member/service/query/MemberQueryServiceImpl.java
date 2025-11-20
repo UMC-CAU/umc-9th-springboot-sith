@@ -9,8 +9,6 @@ import com.example.umc9th.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class MemberQueryServiceImpl implements MemberQueryService{
@@ -18,8 +16,8 @@ public class MemberQueryServiceImpl implements MemberQueryService{
     private final MemberRepository memberRepository;
     @Override
     public MemberResDTO.myPageInfo findMyPage(Long memberId) {
-        Optional<Member> member = memberRepository.findById(memberId);
-        if(member.isEmpty()) throw new MemberException(MemberErrorCode.NO_MEMBER);
-        return MemberConverter.toMemberDTO(member.get());
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new MemberException(MemberErrorCode.NO_MEMBER));
+        return MemberConverter.toMyPageInfo(member);
     }
 }

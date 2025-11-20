@@ -27,6 +27,7 @@ public class Mission extends BaseEntity {
     @Column(name = "deadline",nullable = false)
     private LocalDateTime deadline;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;

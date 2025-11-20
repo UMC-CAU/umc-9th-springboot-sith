@@ -1,4 +1,4 @@
-package com.example.umc9th.global;
+package com.example.umc9th.global.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

@@ -8,6 +8,7 @@ import com.example.umc9th.domain.review.service.command.ReviewCommandService;
 import com.example.umc9th.domain.review.service.query.ReviewQueryService;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import com.example.umc9th.global.apiPayload.code.GeneralSuccessCode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +30,8 @@ public class ReviewController {
     }
 
     @PostMapping("/api/review")
-    public ApiResponse<ReviewInfo> createReview(@RequestBody ReviewReqDTO.ReviewReqInfo request){
-        ReviewInfo result = reviewCommandService.createReview(request);
+    public ApiResponse<ReviewResDTO.ReviewCreateResDTO> createReview(@RequestBody @Valid ReviewReqDTO.ReviewReqInfo request){
+        ReviewResDTO.ReviewCreateResDTO result = reviewCommandService.createReview(request);
         GeneralSuccessCode code = GeneralSuccessCode.CREATED;
         return ApiResponse.onSuccess(code,result);
     }
