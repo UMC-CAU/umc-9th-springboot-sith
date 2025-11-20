@@ -1,11 +1,11 @@
-package com.example.umc9th.domain.mission.Service.query;
+package com.example.umc9th.domain.mission.service.query;
 
+import com.example.umc9th.domain.member.exception.code.MemberErrorCode;
 import com.example.umc9th.domain.member.repository.MemberRepository;
 import com.example.umc9th.domain.mission.dto.SelectedMissionInfo;
 import com.example.umc9th.domain.mission.dto.UnselectedMissionInfo;
-import com.example.umc9th.domain.mission.dto.res.MemberMissionResDTO;
+import com.example.umc9th.domain.mission.dto.res.MissionResDTO;
 import com.example.umc9th.domain.mission.exception.MissionException;
-import com.example.umc9th.domain.mission.exception.code.MissionErrorCode;
 import com.example.umc9th.domain.mission.repository.MemberMissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,18 +14,18 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class MemberMissionQueryServiceImpl implements MemberMissionQueryService{
+public class MissionQueryServiceImpl implements MissionQueryService {
 
     private final MemberMissionRepository memberMissionRepository;
     private final MemberRepository memberRepository;
 
     @Override
-    public MemberMissionResDTO.SelectedMissionList findSelectedMissionsWithPaging(Long memberId,
-                                                                                  Integer lastPoint,
-                                                                                  Long lastMemberMissionId,
-                                                                                  Boolean isCompleted, Integer pageSize){
+    public MissionResDTO.SelectedMissionList findSelectedMissionsWithPaging(Long memberId,
+                                                                            Integer lastPoint,
+                                                                            Long lastMemberMissionId,
+                                                                            Boolean isCompleted, Integer pageSize){
 
-        memberRepository.findById(memberId).orElseThrow(()->new MissionException(MissionErrorCode.NO_MEMBER));
+        memberRepository.findById(memberId).orElseThrow(()->new MissionException(MemberErrorCode.NO_MEMBER));
 
         String cursor = null;
         if(lastPoint !=null && lastMemberMissionId != null){
@@ -43,23 +43,23 @@ public class MemberMissionQueryServiceImpl implements MemberMissionQueryService{
             nextId = lastMission.getMemberMissionId();
             hasNext = true;
         }
-        return new MemberMissionResDTO.SelectedMissionList(missions,nextPoint,nextId,hasNext);
+        return new MissionResDTO.SelectedMissionList(missions,nextPoint,nextId,hasNext);
     }
 
     @Override
     public Long findCompletedMissionsCountByDistrict(Long memberId, String district){
-        memberRepository.findById(memberId).orElseThrow(()->new MissionException(MissionErrorCode.NO_MEMBER));
+        memberRepository.findById(memberId).orElseThrow(()->new MissionException(MemberErrorCode.NO_MEMBER));
         return memberMissionRepository.findCompletedMissionCountByDistrict(memberId,district);
     }
 
     @Override
-    public MemberMissionResDTO.UnSelectedMissionList findUnselectedMissionsByDistrictWithPaging(Long memberId,
-                                                                                         String district,
-                                                                                         Integer lastPoint,
-                                                                                         Long lastMissionId,
-                                                                                         Integer pageSize){
+    public MissionResDTO.UnSelectedMissionList findUnselectedMissionsByDistrictWithPaging(Long memberId,
+                                                                                          String district,
+                                                                                          Integer lastPoint,
+                                                                                          Long lastMissionId,
+                                                                                          Integer pageSize){
 
-        memberRepository.findById(memberId).orElseThrow(()->new MissionException(MissionErrorCode.NO_MEMBER));
+        memberRepository.findById(memberId).orElseThrow(()->new MissionException(MemberErrorCode.NO_MEMBER));
 
         String cursor = null;
         if(lastPoint !=null && lastMissionId != null){
@@ -78,6 +78,7 @@ public class MemberMissionQueryServiceImpl implements MemberMissionQueryService{
             hasNext = true;
         }
 
-        return new MemberMissionResDTO.UnSelectedMissionList(missions,nextPoint,nextId,hasNext);
+        return new MissionResDTO.UnSelectedMissionList(missions,nextPoint,nextId,hasNext);
     }
+
 }
