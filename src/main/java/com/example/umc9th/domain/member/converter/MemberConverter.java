@@ -5,7 +5,7 @@ import com.example.umc9th.domain.member.dto.res.MemberResDTO;
 import com.example.umc9th.domain.member.entity.Member;
 
 public class MemberConverter {
-    public static MemberResDTO.myPageInfo toMemberDTO(Member m){
+    public static MemberResDTO.myPageInfo toMyPageInfo(Member m){
         return MemberResDTO.myPageInfo.builder()
                 .nickname(m.getNickname())
                 .email(m.getEmail())
