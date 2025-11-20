@@ -32,15 +32,14 @@ public class MemberMissionRepositoryImpl implements MemberMissionRepositoryCusto
         StringExpression cursorValue = StringExpressions.lpad(m.point.stringValue(),10,'0')
                 .concat(StringExpressions.lpad(mm.id.stringValue(),10,'0'));
 
-        List<SelectedMissionInfo> result = jpaQueryFactory.select(Projections.constructor(SelectedMissionInfo.class,
-                mm.id.as("memberMissionId"), s.name.as("storeName"), m.description.as("missionDescription"), m.point.as("point"),
-                mm.isCompleted.as("is_completed")))
+        return jpaQueryFactory.select(Projections.constructor(SelectedMissionInfo.class,
+                        mm.id.as("memberMissionId"), s.name.as("storeName"), m.description.as("missionDescription"), m.point.as("point"),
+                        mm.isCompleted.as("is_completed")))
                 .from(mm).join(mm.mission,m).join(m.store,s)
                 .where(mm.member.id.eq(memberId).and(cursor != null ? cursorValue.lt(cursor):null).and(mm.isCompleted.eq(isCompleted)))
                 .orderBy(m.point.desc(),mm.id.desc())
                 .limit(pageSize)
                 .fetch();
-        return result;
     }
 
     @Override
@@ -51,11 +50,9 @@ public class MemberMissionRepositoryImpl implements MemberMissionRepositoryCusto
         QStore s = QStore.store;
         QDistrict d = QDistrict.district;
 
-        Long result = jpaQueryFactory.select(mm.count()).from(mm).join(mm.mission, m).join(m.store, s).join(s.district, d)
+        return jpaQueryFactory.select(mm.count()).from(mm).join(mm.mission, m).join(m.store, s).join(s.district, d)
                 .where(mm.member.id.eq(memberId).and(mm.isCompleted.eq(true)).and(d.name.eq(district)))
                 .fetchOne();
-
-        return result;
     }
 
     @Override
@@ -69,14 +66,12 @@ public class MemberMissionRepositoryImpl implements MemberMissionRepositoryCusto
         StringExpression cursorValue = StringExpressions.lpad(m.point.stringValue(),10,'0')
                 .concat(StringExpressions.lpad(m.id.stringValue(),10,'0'));
 
-        List<UnselectedMissionInfo> result = jpaQueryFactory.select(Projections.constructor(UnselectedMissionInfo.class,
-                m.id.as("missionId"),s.name.as("storeName"),m.description.as("missionDescription"),m.point,m.deadline))
+        return jpaQueryFactory.select(Projections.constructor(UnselectedMissionInfo.class,
+                        m.id.as("missionId"),s.name.as("storeName"),m.description.as("missionDescription"),m.point,m.deadline))
                 .from(s).join(s.district,d).join(m).on(s.id.eq(m.store.id)).leftJoin(mm).on(m.id.eq(mm.mission.id).
                         and(mm.member.id.eq(memberId)))
                 .where(d.name.eq(district).and(mm.id.isNull()).and(cursor !=null ? cursorValue.lt(cursor):null))
                 .orderBy(m.point.desc(),m.id.desc())
                 .limit(pageSize).fetch();
-
-        return result;
     }
 }
