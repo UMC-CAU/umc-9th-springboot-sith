@@ -12,7 +12,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class FoodExistValidator implements ConstraintValidator<ExistFoods, List<Long>> {
+public class FoodsExistValidator implements ConstraintValidator<ExistFoods, List<Long>> {
 
     private final FoodRepository foodRepository;
 

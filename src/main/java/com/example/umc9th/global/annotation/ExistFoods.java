@@ -1,13 +1,13 @@
 package com.example.umc9th.global.annotation;
 
-import com.example.umc9th.global.validator.FoodExistValidator;
+import com.example.umc9th.global.validator.FoodsExistValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = FoodExistValidator.class)
+@Constraint(validatedBy = FoodsExistValidator.class)
 @Target({ElementType.FIELD,ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExistFoods {
