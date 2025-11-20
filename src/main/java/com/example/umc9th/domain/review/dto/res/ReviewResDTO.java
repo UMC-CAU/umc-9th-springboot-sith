@@ -3,6 +3,7 @@ package com.example.umc9th.domain.review.dto.res;
 import com.example.umc9th.domain.review.dto.ReviewInfo;
 import lombok.Builder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ReviewResDTO {
@@ -12,4 +13,7 @@ public class ReviewResDTO {
 
     @Builder
     public record Exception(String exception){}
+
+    @Builder
+    public record ReviewCreateResDTO(Long reviewId, LocalDateTime createdAt){}
 }
