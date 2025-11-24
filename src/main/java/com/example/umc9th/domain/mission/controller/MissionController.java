@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(value = "/api")
 public class MissionController {
 
     private final MissionQueryService missionQueryService;
     private final MissionCommandService missionCommandService;
 
-    @GetMapping("/api/my-missions")
+    @GetMapping("/my-missions")
     public ApiResponse<MissionResDTO.SelectedMissionList> getSelectedMissions(
             @RequestParam Long memberId,
             @RequestParam(required = false) Integer lastPoint,
@@ -34,7 +35,7 @@ public class MissionController {
         return ApiResponse.onSuccess(code, result);
     }
 
-    @GetMapping("/api/missions/completed/count")
+    @GetMapping("/missions/completed/count")
     public ApiResponse<Long> getCompletedMissionCount(
             @RequestParam Long memberId,
             @RequestParam String district)
@@ -44,7 +45,7 @@ public class MissionController {
         return ApiResponse.onSuccess(code,result);
     }
 
-    @GetMapping("/api/missions/unselected")
+    @GetMapping("/missions/unselected")
     public ApiResponse<MissionResDTO.UnSelectedMissionList> getUnselectedMissions(
             @RequestParam Long memberId,
             @RequestParam String district,
@@ -59,14 +60,14 @@ public class MissionController {
         return ApiResponse.onSuccess(code,result);
     }
 
-    @PostMapping("/api/mission")
+    @PostMapping("/missions")
     public ApiResponse<MissionResDTO.MissionRes> createMission(@RequestBody @Valid MissionReqDTO.MissionReq dto){
         MissionResDTO.MissionRes result = missionCommandService.createMission(dto);
         GeneralSuccessCode code = GeneralSuccessCode.CREATED;
         return ApiResponse.onSuccess(code,result);
     }
 
-    @PostMapping("/api/member-mission")
+    @PostMapping("/member-missions")
     public ApiResponse<MissionResDTO.MemberMissionRes> createMemberMission(
             @RequestBody @Valid MissionReqDTO.MemberMissionReq dto)
     {

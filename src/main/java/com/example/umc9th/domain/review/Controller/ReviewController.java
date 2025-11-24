@@ -16,12 +16,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(value = "/api")
 public class ReviewController {
 
     private final ReviewQueryService reviewQueryService;
     private final ReviewCommandService reviewCommandService;
 
-    @GetMapping("/api/my-reviews")
+    @GetMapping("/my-reviews")
     public ApiResponse<ReviewResDTO.ReviewList> findReviews(
             @RequestParam Long id, @RequestParam String query, @RequestParam String type){
         List<ReviewInfo> result = reviewQueryService.findMyReviews(id,query,type);
@@ -29,7 +30,7 @@ public class ReviewController {
         return ApiResponse.onSuccess(code, ReviewConverter.toReviewDTO(result));
     }
 
-    @PostMapping("/api/review")
+    @PostMapping("/reviews")
     public ApiResponse<ReviewResDTO.ReviewCreateResDTO> createReview(@RequestBody @Valid ReviewReqDTO.ReviewReqInfo request){
         ReviewResDTO.ReviewCreateResDTO result = reviewCommandService.createReview(request);
         GeneralSuccessCode code = GeneralSuccessCode.CREATED;
