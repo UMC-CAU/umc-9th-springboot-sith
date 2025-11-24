@@ -23,13 +23,16 @@ public class Store extends BaseEntity {
     @Column(name = "detail_address",nullable = false,length = 100)
     private String detailAddress;
 
-    @Column(name = "boss_number",nullable = false)
+    @Setter
+    @Column(name = "boss_number",nullable = false,unique = true)
     private String bossNumber;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "district_id")
     private District district;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "food_id")
     private Food food;

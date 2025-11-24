@@ -9,8 +9,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum MissionErrorCode implements BaseErrorCode {
 
-    NO_MEMBER(HttpStatus.NOT_FOUND,"MISSION_MEMBER400_1","해당 멤버가 존재하지 않습니다."),
-    NO_DISTRICT(HttpStatus.NOT_FOUND,"MISSION_DISTRICT400_1","해당 지역이 존재하지 않습니다.");
+    NO_MISSION(HttpStatus.NOT_FOUND,"MISSION_404_1","해당 미션이 존재하지 않습니다.");
 
     private final HttpStatus status;
     private final String code;
