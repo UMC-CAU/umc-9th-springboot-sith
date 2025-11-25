@@ -16,4 +16,6 @@ public interface MissionQueryService {
                                                                                    Integer lastPoint,
                                                                                    Long lastMissionId,
                                                                                    Integer pageSize);
+
+    MissionResDTO.MissionPreviewListDTO getMissions(String storeName,Integer page);
 }
