@@ -25,15 +25,9 @@ public class MissionController implements MissionControllerDocs {
 
     @GetMapping("/my-missions")
     public ApiResponse<MissionResDTO.SelectedMissionList> getSelectedMissions(
-            @RequestParam Long memberId,
-            @RequestParam(required = false) Integer lastPoint,
-            @RequestParam(required = false) Long lastMemberMissionId,
-            @RequestParam Boolean isCompleted,
-            @RequestParam Integer pageSize){
+           @Valid MissionReqDTO.MyMissionReqDTO request ){
 
-        MissionResDTO.SelectedMissionList result = missionQueryService.findSelectedMissionsWithPaging(
-                memberId, lastPoint, lastMemberMissionId, isCompleted, pageSize
-        );
+        MissionResDTO.SelectedMissionList result = missionQueryService.findSelectedMissionsWithPaging(request);
         GeneralSuccessCode code = GeneralSuccessCode.OK;
         return ApiResponse.onSuccess(code, result);
     }
