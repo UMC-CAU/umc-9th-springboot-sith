@@ -5,17 +5,20 @@ import com.example.umc9th.domain.mission.dto.req.MissionReqDTO;
 import com.example.umc9th.domain.mission.service.command.MissionCommandService;
 import com.example.umc9th.domain.mission.service.query.MissionQueryService;
 import com.example.umc9th.domain.mission.dto.res.MissionResDTO;
+import com.example.umc9th.global.annotation.ValidPageNumber;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import com.example.umc9th.global.apiPayload.code.GeneralSuccessCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api")
-public class MissionController {
+@Validated
+public class MissionController implements MissionControllerDocs {
 
     private final MissionQueryService missionQueryService;
     private final MissionCommandService missionCommandService;
@@ -75,4 +78,13 @@ public class MissionController {
         GeneralSuccessCode code = GeneralSuccessCode.CREATED;
         return ApiResponse.onSuccess(code,result);
     }
+
+    @GetMapping("/missions")
+    public ApiResponse<MissionResDTO.MissionPreviewListDTO> getMissions(
+            @RequestParam String storeName, @RequestParam(defaultValue = "1") @ValidPageNumber Integer page){
+        MissionResDTO.MissionPreviewListDTO result = missionQueryService.getMissions(storeName,page-1);
+        GeneralSuccessCode code = GeneralSuccessCode.OK;
+        return ApiResponse.onSuccess(code,result);
+    }
+
 }
