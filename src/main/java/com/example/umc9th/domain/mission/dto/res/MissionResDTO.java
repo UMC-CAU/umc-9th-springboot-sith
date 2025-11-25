@@ -12,7 +12,9 @@ public class MissionResDTO {
     @Builder
     public record SelectedMissionList(
             List<SelectedMissionInfo> missions,
-            Integer lastPoint, Long lastMemberMissionId, Boolean hasNext){}
+            Integer lastPoint,
+            Long lastMemberMissionId,
+            boolean hasNext){}
 
     @Builder
     public record UnSelectedMissionList(
