@@ -1,14 +1,17 @@
 package com.example.umc9th.domain.mission.controller;
 
+import com.example.umc9th.domain.mission.dto.SelectedMissionInfo;
 import com.example.umc9th.domain.mission.dto.req.MissionReqDTO;
 
 import com.example.umc9th.domain.mission.service.command.MissionCommandService;
 import com.example.umc9th.domain.mission.service.query.MissionQueryService;
 import com.example.umc9th.domain.mission.dto.res.MissionResDTO;
+import com.example.umc9th.global.annotation.ExistMemberMission;
 import com.example.umc9th.global.annotation.ValidPageNumber;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import com.example.umc9th.global.apiPayload.code.GeneralSuccessCode;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -81,4 +84,13 @@ public class MissionController implements MissionControllerDocs {
         return ApiResponse.onSuccess(code,result);
     }
 
+    @Override
+    @PostMapping("/member-missions/complete")
+    public ApiResponse<SelectedMissionInfo> completeMission(
+            @RequestParam @ExistMemberMission @Min(value = 0) Long memberMissionId){
+
+        SelectedMissionInfo result = missionCommandService.completeMission(memberMissionId);
+        GeneralSuccessCode code = GeneralSuccessCode.OK;
+        return ApiResponse.onSuccess(code,result);
+    }
 }
