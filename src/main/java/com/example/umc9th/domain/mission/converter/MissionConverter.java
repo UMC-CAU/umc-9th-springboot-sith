@@ -1,6 +1,7 @@
 package com.example.umc9th.domain.mission.converter;
 
 import com.example.umc9th.domain.member.entity.Member;
+import com.example.umc9th.domain.mission.dto.SelectedMissionInfo;
 import com.example.umc9th.domain.mission.dto.req.MissionReqDTO;
 import com.example.umc9th.domain.mission.dto.res.MissionResDTO;
 import com.example.umc9th.domain.mission.entity.Mission;
@@ -53,5 +54,15 @@ public class MissionConverter {
                 .description(mission.getDescription())
                 .point(mission.getPoint())
                 .deadLine(mission.getDeadline().toLocalDate()).build();
+    }
+
+    public static SelectedMissionInfo toSelectedMission(Mission mission, MemberMission memberMission){
+        return SelectedMissionInfo.builder()
+                .memberMissionId(memberMission.getId())
+                .isCompleted(memberMission.isCompleted())
+                .missionDescription(mission.getDescription())
+                .point(mission.getPoint())
+                .storeName(mission.getStore().getName())
+                .build();
     }
 }
