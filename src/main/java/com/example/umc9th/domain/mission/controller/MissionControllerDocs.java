@@ -1,7 +1,9 @@
 package com.example.umc9th.domain.mission.controller;
 
+import com.example.umc9th.domain.mission.dto.SelectedMissionInfo;
 import com.example.umc9th.domain.mission.dto.req.MissionReqDTO;
 import com.example.umc9th.domain.mission.dto.res.MissionResDTO;
+import com.example.umc9th.global.annotation.ExistMemberMission;
 import com.example.umc9th.global.annotation.ValidPageNumber;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public interface MissionControllerDocs {
@@ -40,4 +43,18 @@ public interface MissionControllerDocs {
     })
     ApiResponse<MissionResDTO.SelectedMissionList> getSelectedMissions(
             @Valid MissionReqDTO.MyMissionReqDTO request );
+
+
+    @Operation(
+            summary = "진행 중인 미션 진행 완료로 변경 api",
+            description = "진행 중인 미션을 진행 완료로 변경합니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200",
+                    description = "변경된 미션 정보가 성공적으로 반환됨"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400",
+                    description = "실패 코드와 메시지가 반환됨",
+                    content = @Content(schema = @Schema(implementation = ApiResponse.class))
+            )
+    })
+    ApiResponse<SelectedMissionInfo> completeMission(@RequestParam @ExistMemberMission @Min(value = 0) Long missionId);
 }
