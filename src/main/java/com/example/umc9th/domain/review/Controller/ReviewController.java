@@ -25,9 +25,9 @@ public class ReviewController implements ReviewControllerDocs{
     @GetMapping("/my-reviews")
     public ApiResponse<ReviewResDTO.myReviewListDTO> findMyReviews(
             @RequestParam Long id, @RequestParam String query,
-            @RequestParam String type, @ValidPageNumber @RequestParam Integer page)
+            @RequestParam String type, @ValidPageNumber @RequestParam(defaultValue = "1") Integer page)
     {
-        ReviewResDTO.myReviewListDTO result = reviewQueryService.findMyReviews(id, query, type, page);
+        ReviewResDTO.myReviewListDTO result = reviewQueryService.findMyReviews(id, query, type, page-1);
         GeneralSuccessCode code = GeneralSuccessCode.OK;
         return ApiResponse.onSuccess(code, result);
     }
@@ -42,9 +42,9 @@ public class ReviewController implements ReviewControllerDocs{
     @Override
     @GetMapping("/reviews")
     public ApiResponse<ReviewResDTO.ReviewPreViewListDTO> getReviews(
-            @RequestParam String storeName, @RequestParam @ValidPageNumber Integer page
+            @RequestParam String storeName, @RequestParam(defaultValue = "1") @ValidPageNumber Integer page
     ){
-        ReviewResDTO.ReviewPreViewListDTO result = reviewQueryService.findReviews(storeName, page);
+        ReviewResDTO.ReviewPreViewListDTO result = reviewQueryService.findReviews(storeName, page-1);
         GeneralSuccessCode code = GeneralSuccessCode.OK;
         return ApiResponse.onSuccess(code,result);
     }
