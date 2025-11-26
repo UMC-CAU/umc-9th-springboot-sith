@@ -4,11 +4,11 @@ package com.example.umc9th.domain.review.repository;
 import com.example.umc9th.domain.review.dto.ReviewInfo;
 import com.querydsl.core.types.Predicate;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 public interface ReviewRepositoryCustom {
-
     @Transactional
-    List<ReviewInfo> findMyReviews(Long memberId, Predicate predicate);
+    Page<ReviewInfo> findMyReviews(Long memberId, Predicate predicate, Pageable pageable);
 }

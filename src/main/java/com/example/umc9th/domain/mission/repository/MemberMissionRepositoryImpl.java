@@ -11,6 +11,9 @@ import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,7 +26,7 @@ public class MemberMissionRepositoryImpl implements MemberMissionRepositoryCusto
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<SelectedMissionInfo> findSelectedMissionsWithCursor(Long memberId, String cursor, Boolean isCompleted, Integer pageSize) {
+    public Slice<SelectedMissionInfo> findSelectedMissionsWithCursor(Long memberId, String cursor, boolean isCompleted, Pageable pageable) {
 
         QMemberMission mm = QMemberMission.memberMission;
         QMission m = QMission.mission;
@@ -32,14 +35,23 @@ public class MemberMissionRepositoryImpl implements MemberMissionRepositoryCusto
         StringExpression cursorValue = StringExpressions.lpad(m.point.stringValue(),10,'0')
                 .concat(StringExpressions.lpad(mm.id.stringValue(),10,'0'));
 
-        return jpaQueryFactory.select(Projections.constructor(SelectedMissionInfo.class,
+        List<SelectedMissionInfo> result = jpaQueryFactory.select(Projections.constructor(SelectedMissionInfo.class,
                         mm.id.as("memberMissionId"), s.name.as("storeName"), m.description.as("missionDescription"), m.point.as("point"),
                         mm.isCompleted.as("is_completed")))
                 .from(mm).join(mm.mission,m).join(m.store,s)
                 .where(mm.member.id.eq(memberId).and(cursor != null ? cursorValue.lt(cursor):null).and(mm.isCompleted.eq(isCompleted)))
                 .orderBy(m.point.desc(),mm.id.desc())
-                .limit(pageSize)
+                .limit(pageable.getPageSize()+1)
                 .fetch();
+
+        boolean hasNext = false;
+
+        if(result.size() > pageable.getPageSize()){
+            hasNext = true;
+            result.remove(pageable.getPageSize());
+        }
+
+        return new SliceImpl<>(result,pageable,hasNext);
     }
 
     @Override

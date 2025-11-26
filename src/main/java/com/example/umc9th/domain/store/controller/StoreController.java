@@ -17,7 +17,7 @@ public class StoreController {
 
     private final StoreCommandService storeCommandService;
 
-    @PostMapping("/api/store")
+    @PostMapping("/api/stores")
     ApiResponse<StoreResDTO.StoreRes> createStore(@RequestBody @Valid StoreReqDTO.StoreReq dto){
         StoreResDTO.StoreRes result = storeCommandService.createStore(dto);
         GeneralSuccessCode code = GeneralSuccessCode.CREATED;

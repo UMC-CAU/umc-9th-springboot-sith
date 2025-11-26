@@ -12,6 +12,16 @@ import java.time.LocalDateTime;
 
 public class MissionReqDTO {
     @Builder
+    public record MyMissionReqDTO(
+            @ExistMember
+            Long memberId,
+            @Min(value = 0)
+            Integer lastPoint,
+            @Min(value = 0)
+            Long lastMemberMissionId,
+            boolean isCompleted
+    ){}
+    @Builder
     public record MissionReq(
             @NotNull
             @ExistStore

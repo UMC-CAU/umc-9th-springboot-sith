@@ -17,6 +17,7 @@ public class MemberMission extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column(name = "is_completed",nullable = false)
     @Builder.Default
     private boolean isCompleted = false;

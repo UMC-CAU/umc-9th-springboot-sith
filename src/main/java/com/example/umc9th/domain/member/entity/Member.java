@@ -55,6 +55,7 @@ public class Member extends BaseEntity {
     @Column(name = "nickname",nullable = false)
     private String nickname;
 
+    @Setter
     @Column(name = "point",nullable = false)
     @Builder.Default
     private int point = 0;

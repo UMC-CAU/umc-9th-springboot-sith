@@ -4,13 +4,19 @@ import com.example.umc9th.domain.review.dto.ReviewInfo;
 import com.example.umc9th.domain.review.dto.req.ReviewReqDTO;
 import com.example.umc9th.domain.review.dto.res.ReviewResDTO;
 import com.example.umc9th.domain.review.entity.Review;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
+import java.time.LocalDate;
 
 public class ReviewConverter {
-    public static ReviewResDTO.ReviewList toReviewDTO(List<ReviewInfo> reviews){
-        return ReviewResDTO.ReviewList.builder()
-                .reviews(reviews)
+    public static ReviewResDTO.myReviewListDTO toMyReviewListDTO(Page<ReviewInfo> result){
+        return ReviewResDTO.myReviewListDTO.builder()
+                .reviews(result.getContent())
+                .listSize(result.getSize())
+                .totalPage(result.getTotalPages())
+                .totalElements(result.getTotalElements())
+                .isFirst(result.isFirst())
+                .isLast(result.isLast())
                 .build();
     }
     public static ReviewResDTO.Exception toExceptionDTO(String exception){
@@ -26,6 +32,28 @@ public class ReviewConverter {
         return Review.builder()
                 .content(dto.content())
                 .rating(dto.rating())
+                .build();
+    }
+
+    public static ReviewResDTO.ReviewPreViewListDTO toReviewPreviewListDTO(Page<Review> result){
+        return ReviewResDTO.ReviewPreViewListDTO.builder()
+                .reviewList(result.getContent().stream()
+                        .map(ReviewConverter::toReviewPreviewDTO)
+                        .toList())
+                .listSize(result.getSize())
+                .totalPage(result.getTotalPages())
+                .totalElements(result.getTotalElements())
+                .isFirst(result.isFirst())
+                .isLast(result.isLast())
+                .build();
+    }
+
+    public static ReviewResDTO.ReviewPreViewDTO toReviewPreviewDTO(Review review){
+        return ReviewResDTO.ReviewPreViewDTO.builder()
+                .ownerNickname(review.getMember().getName())
+                .score(review.getRating())
+                .content(review.getContent())
+                .createdAt(LocalDate.from(review.getCreatedAt()))
                 .build();
     }
 }

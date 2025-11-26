@@ -3,12 +3,14 @@ package com.example.umc9th.domain.mission.repository;
 
 import com.example.umc9th.domain.mission.dto.SelectedMissionInfo;
 import com.example.umc9th.domain.mission.dto.UnselectedMissionInfo;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
 
 public interface MemberMissionRepositoryCustom {
-    List<SelectedMissionInfo> findSelectedMissionsWithCursor(Long memberId, String cursor, Boolean isCompleted, Integer pageSize);
+    Slice<SelectedMissionInfo> findSelectedMissionsWithCursor(Long memberId, String cursor, boolean isCompleted, Pageable pageable);
 
     Long findCompletedMissionCountByDistrict(Long memberId,String district);
 
