@@ -49,7 +49,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
             booleanBuilder.and(r.rating.goe(Double.parseDouble(query))).and(r.rating.lt(Double.parseDouble(query)+1));
         }
 
-        PageRequest pageRequest = PageRequest.of(page,3);
+        PageRequest pageRequest = PageRequest.of(page,10);
         Page<ReviewInfo> result = reviewRepository.findMyReviews(memberId,booleanBuilder,pageRequest);
 
         if(page >= result.getTotalPages()) throw new GeneralException(GeneralErrorCode.INVALID_PAGE_NUMBER);
@@ -62,7 +62,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
         Store store = storeRepository.findByName(storeName)
                 .orElseThrow(()->new StoreException(StoreErrorCode.NO_STORE));
-        PageRequest pageRequest = PageRequest.of(page,3);
+        PageRequest pageRequest = PageRequest.of(page,10);
         Page<Review> result = reviewRepository.findAllByStore(store,pageRequest);
 
         if(page >= result.getTotalPages()) throw new GeneralException(GeneralErrorCode.INVALID_PAGE_NUMBER);

@@ -48,7 +48,7 @@ public class MissionQueryServiceImpl implements MissionQueryService {
         if(lastPoint !=null && lastMemberMissionId != null){
             cursor = String.format("%010d%010d",lastPoint,lastMemberMissionId);
         }
-        PageRequest pageRequest = PageRequest.of(0,3);
+        PageRequest pageRequest = PageRequest.of(0,10   );
 
         Slice<SelectedMissionInfo> missions = memberMissionRepository.findSelectedMissionsWithCursor(
                 memberId,cursor,isCompleted,pageRequest);
@@ -103,7 +103,7 @@ public class MissionQueryServiceImpl implements MissionQueryService {
     public MissionResDTO.MissionPreviewListDTO getMissions(String storeName,Integer page){
         Store store = storeRepository.findByName(storeName)
                 .orElseThrow(()->new StoreException(StoreErrorCode.NO_STORE));
-        PageRequest pageRequest = PageRequest.of(page,3);
+        PageRequest pageRequest = PageRequest.of(page,10);
 
         Page<Mission> result = missionRepository.findAllByStore(store,pageRequest);
         if(page>= result.getTotalPages()) throw new GeneralException(GeneralErrorCode.INVALID_PAGE_NUMBER);
