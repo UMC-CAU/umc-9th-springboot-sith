@@ -8,8 +8,10 @@ import com.example.umc9th.domain.member.entity.mapping.MemberFood;
 import com.example.umc9th.domain.member.repository.FoodRepository;
 import com.example.umc9th.domain.member.repository.MemberFoodRepository;
 import com.example.umc9th.domain.member.repository.MemberRepository;
+import com.example.umc9th.global.auth.enums.Role;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,12 +24,16 @@ public class MemberCommandServiceImpl implements MemberCommandService{
     private final MemberRepository memberRepository;
     private final FoodRepository foodRepository;
     private final MemberFoodRepository memberFoodRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public MemberResDTO.JoinDTO signUp(MemberReqDTO.JoinDTO dto){
-        Member member = MemberConverter.toMember(dto);
-        if(dto.preferFoods().size()>1){
+        String salt = passwordEncoder.encode(dto.password());
+
+        Member member = MemberConverter.toMember(dto,salt, Role.ROLE_USER);
+
+        if(!dto.preferFoods().isEmpty()){
             List<MemberFood> memberFoods = dto.preferFoods().stream()
                     .map(id->MemberFood.builder()
                             .member(member)
