@@ -1,40 +1,41 @@
 package com.example.umc9th.domain.mission.controller;
 
+import com.example.umc9th.domain.mission.dto.SelectedMissionInfo;
 import com.example.umc9th.domain.mission.dto.req.MissionReqDTO;
 
 import com.example.umc9th.domain.mission.service.command.MissionCommandService;
 import com.example.umc9th.domain.mission.service.query.MissionQueryService;
 import com.example.umc9th.domain.mission.dto.res.MissionResDTO;
+import com.example.umc9th.global.annotation.ExistMemberMission;
+import com.example.umc9th.global.annotation.ValidPageNumber;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import com.example.umc9th.global.apiPayload.code.GeneralSuccessCode;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequiredArgsConstructor
-public class MissionController {
+@RequestMapping(value = "/api")
+@Validated
+public class MissionController implements MissionControllerDocs {
 
     private final MissionQueryService missionQueryService;
     private final MissionCommandService missionCommandService;
 
-    @GetMapping("/api/my-missions")
+    @GetMapping("/my-missions")
     public ApiResponse<MissionResDTO.SelectedMissionList> getSelectedMissions(
-            @RequestParam Long memberId,
-            @RequestParam(required = false) Integer lastPoint,
-            @RequestParam(required = false) Long lastMemberMissionId,
-            @RequestParam Boolean isCompleted,
-            @RequestParam Integer pageSize){
+           @Valid MissionReqDTO.MyMissionReqDTO request ){
 
-        MissionResDTO.SelectedMissionList result = missionQueryService.findSelectedMissionsWithPaging(
-                memberId, lastPoint, lastMemberMissionId, isCompleted, pageSize
-        );
+        MissionResDTO.SelectedMissionList result = missionQueryService.findSelectedMissionsWithPaging(request);
         GeneralSuccessCode code = GeneralSuccessCode.OK;
         return ApiResponse.onSuccess(code, result);
     }
 
-    @GetMapping("/api/missions/completed/count")
+    @GetMapping("/missions/completed/count")
     public ApiResponse<Long> getCompletedMissionCount(
             @RequestParam Long memberId,
             @RequestParam String district)
@@ -44,7 +45,7 @@ public class MissionController {
         return ApiResponse.onSuccess(code,result);
     }
 
-    @GetMapping("/api/missions/unselected")
+    @GetMapping("/missions/unselected")
     public ApiResponse<MissionResDTO.UnSelectedMissionList> getUnselectedMissions(
             @RequestParam Long memberId,
             @RequestParam String district,
@@ -59,19 +60,37 @@ public class MissionController {
         return ApiResponse.onSuccess(code,result);
     }
 
-    @PostMapping("/api/mission")
+    @PostMapping("/missions")
     public ApiResponse<MissionResDTO.MissionRes> createMission(@RequestBody @Valid MissionReqDTO.MissionReq dto){
         MissionResDTO.MissionRes result = missionCommandService.createMission(dto);
         GeneralSuccessCode code = GeneralSuccessCode.CREATED;
         return ApiResponse.onSuccess(code,result);
     }
 
-    @PostMapping("/api/member-mission")
+    @PostMapping("/member-missions")
     public ApiResponse<MissionResDTO.MemberMissionRes> createMemberMission(
             @RequestBody @Valid MissionReqDTO.MemberMissionReq dto)
     {
         MissionResDTO.MemberMissionRes result = missionCommandService.createMemberMission(dto);
         GeneralSuccessCode code = GeneralSuccessCode.CREATED;
+        return ApiResponse.onSuccess(code,result);
+    }
+
+    @GetMapping("/missions")
+    public ApiResponse<MissionResDTO.MissionPreviewListDTO> getMissions(
+            @RequestParam String storeName, @RequestParam(defaultValue = "1") @ValidPageNumber Integer page){
+        MissionResDTO.MissionPreviewListDTO result = missionQueryService.getMissions(storeName,page-1);
+        GeneralSuccessCode code = GeneralSuccessCode.OK;
+        return ApiResponse.onSuccess(code,result);
+    }
+
+    @Override
+    @PostMapping("/member-missions/complete")
+    public ApiResponse<SelectedMissionInfo> completeMission(
+            @RequestParam @ExistMemberMission @Min(value = 0) Long memberMissionId){
+
+        SelectedMissionInfo result = missionCommandService.completeMission(memberMissionId);
+        GeneralSuccessCode code = GeneralSuccessCode.OK;
         return ApiResponse.onSuccess(code,result);
     }
 }

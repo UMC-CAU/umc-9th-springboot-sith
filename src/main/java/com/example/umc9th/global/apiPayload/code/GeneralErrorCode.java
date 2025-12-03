@@ -13,8 +13,8 @@ public enum GeneralErrorCode implements BaseErrorCode{
     FORBIDDEN(HttpStatus.FORBIDDEN,"AUTH403_1","요청이 거부되었습니다."),
     NOT_FOUND(HttpStatus.NOT_FOUND,"COMMON404_1","요청한 리소스를 찾을 수 없습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"COMMON500_1","예기치 않은 서버 에러가 발생했습니다."),
-    VALID_FAIL(HttpStatus.BAD_REQUEST,"VAILD400_1","검증에 실패했습니다.");
-
+    VALID_FAIL(HttpStatus.BAD_REQUEST,"VALID400_1","검증에 실패했습니다."),
+    INVALID_PAGE_NUMBER(HttpStatus.BAD_REQUEST,"PAGE400_1","유효하지 않은 페이지 번호입니다.");
     private final HttpStatus status;
     private final String code;
     private final String message;

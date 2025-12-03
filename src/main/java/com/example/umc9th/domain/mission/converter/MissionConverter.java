@@ -1,10 +1,12 @@
 package com.example.umc9th.domain.mission.converter;
 
 import com.example.umc9th.domain.member.entity.Member;
+import com.example.umc9th.domain.mission.dto.SelectedMissionInfo;
 import com.example.umc9th.domain.mission.dto.req.MissionReqDTO;
 import com.example.umc9th.domain.mission.dto.res.MissionResDTO;
 import com.example.umc9th.domain.mission.entity.Mission;
 import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
+import org.springframework.data.domain.Page;
 
 public class MissionConverter {
     public static Mission toMission(MissionReqDTO.MissionReq dto){
@@ -31,6 +33,36 @@ public class MissionConverter {
         return MissionResDTO.MemberMissionRes.builder()
                 .memberMissionId(memberMission.getId())
                 .createdAt(memberMission.getCreatedAt())
+                .build();
+    }
+
+    public static MissionResDTO.MissionPreviewListDTO toMissionPreviewList(Page<Mission> result){
+        return MissionResDTO.MissionPreviewListDTO.builder()
+                .missionList(result.getContent()
+                        .stream()
+                        .map(MissionConverter::toMissionPreview).toList())
+                .isFirst(result.isFirst())
+                .isLast(result.isLast())
+                .listSize(result.getSize())
+                .totalElements(result.getTotalElements())
+                .totalPage(result.getTotalPages())
+                .build();
+    }
+
+    public static MissionResDTO.MissionPreviewDTO toMissionPreview(Mission mission){
+        return MissionResDTO.MissionPreviewDTO.builder()
+                .description(mission.getDescription())
+                .point(mission.getPoint())
+                .deadLine(mission.getDeadline().toLocalDate()).build();
+    }
+
+    public static SelectedMissionInfo toSelectedMission(Mission mission, MemberMission memberMission){
+        return SelectedMissionInfo.builder()
+                .memberMissionId(memberMission.getId())
+                .isCompleted(memberMission.isCompleted())
+                .missionDescription(mission.getDescription())
+                .point(mission.getPoint())
+                .storeName(mission.getStore().getName())
                 .build();
     }
 }
