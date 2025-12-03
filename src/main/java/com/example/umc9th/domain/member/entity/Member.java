@@ -9,6 +9,7 @@ import com.example.umc9th.domain.member.exception.MemberException;
 import com.example.umc9th.domain.member.exception.code.MemberErrorCode;
 import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
 import com.example.umc9th.domain.review.entity.Review;
+import com.example.umc9th.global.auth.enums.Role;
 import com.example.umc9th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,7 +31,7 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 6)
+    @Column(name = "name", nullable = false, length = 20)
     private String name;
 
     @Column(name = "address",nullable = false, length = 320)
@@ -50,12 +51,15 @@ public class Member extends BaseEntity {
     @Column(name = "email",nullable = false, unique = true)
     private String email;
 
+    @Column(name = "password",nullable = false)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Column(name = "profile_url", nullable = false)
     @Builder.Default
     private String profileUrl = "/images/default_profile.png";
-
-    @Column(name = "nickname",nullable = false)
-    private String nickname;
 
     @Column(name = "point",nullable = false)
     @Builder.Default
