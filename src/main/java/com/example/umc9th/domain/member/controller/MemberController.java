@@ -30,4 +30,12 @@ public class MemberController {
         GeneralSuccessCode code = GeneralSuccessCode.CREATED;
         return ApiResponse.onSuccess(code,result);
     }
+
+    @PostMapping("/login")
+    public ApiResponse<MemberResDTO.LoginDTO> login(@RequestBody @Valid MemberReqDTO.LoginDTO dto){
+        MemberResDTO.LoginDTO result = memberCommandService.login(dto);
+        GeneralSuccessCode code = GeneralSuccessCode.OK;
+        return ApiResponse.onSuccess(code,result);
+    }
+
 }
