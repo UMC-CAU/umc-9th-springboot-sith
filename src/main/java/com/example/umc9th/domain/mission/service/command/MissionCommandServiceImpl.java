@@ -69,8 +69,7 @@ public class MissionCommandServiceImpl implements MissionCommandService {
         Mission mission = memberMission.getMission();
         memberMission.setCompleted(true);
 
-        int newPoint = member.getPoint() + mission.getPoint();
-        member.setPoint(newPoint);
+        member.addPoint(mission.getPoint());
 
         return MissionConverter.toSelectedMission(mission,memberMission);
     }
