@@ -9,8 +9,9 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum MemberErrorCode implements BaseErrorCode {
 
-    NO_MEMBER(HttpStatus.NOT_FOUND,"MEMBER_404_1","해당 멤버가 존재하지 않습니다.");
-
+    NO_MEMBER(HttpStatus.NOT_FOUND,"MEMBER_404_1","해당 멤버가 존재하지 않습니다."),
+    INVALID_POINT(HttpStatus.BAD_REQUEST,"MEMBER_400_1","유효하지 않은 포인트입니다."),
+    INVALID(HttpStatus.UNAUTHORIZED,"MEMBER_401_1","아이디나 비밀번호가 일치하지 않습니다.");
     private final HttpStatus status;
     private final String code;
     private final String message;

@@ -5,4 +5,6 @@ import com.example.umc9th.domain.member.dto.res.MemberResDTO;
 
 public interface MemberCommandService {
     MemberResDTO.JoinDTO signUp(MemberReqDTO.JoinDTO dto);
+
+    MemberResDTO.LoginDTO login(MemberReqDTO.LoginDTO dto);
 }

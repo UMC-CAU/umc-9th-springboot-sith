@@ -5,8 +5,11 @@ import com.example.umc9th.domain.member.entity.mapping.MemberFood;
 import com.example.umc9th.domain.member.entity.mapping.MemberTerm;
 import com.example.umc9th.domain.member.enums.Gender;
 import com.example.umc9th.domain.member.enums.Status;
+import com.example.umc9th.domain.member.exception.MemberException;
+import com.example.umc9th.domain.member.exception.code.MemberErrorCode;
 import com.example.umc9th.domain.mission.entity.mapping.MemberMission;
 import com.example.umc9th.domain.review.entity.Review;
+import com.example.umc9th.global.auth.enums.Role;
 import com.example.umc9th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,7 +31,7 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 6)
+    @Column(name = "name", nullable = false, length = 20)
     private String name;
 
     @Column(name = "address",nullable = false, length = 320)
@@ -48,14 +51,16 @@ public class Member extends BaseEntity {
     @Column(name = "email",nullable = false, unique = true)
     private String email;
 
+    @Column(name = "password",nullable = false)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Column(name = "profile_url", nullable = false)
     @Builder.Default
     private String profileUrl = "/images/default_profile.png";
 
-    @Column(name = "nickname",nullable = false)
-    private String nickname;
-
-    @Setter
     @Column(name = "point",nullable = false)
     @Builder.Default
     private int point = 0;
@@ -79,4 +84,10 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Review> reviewList = new ArrayList<>();
+
+    public int addPoint(int point){
+        if(point < 0 || this.point + point <0) throw new MemberException(MemberErrorCode.INVALID_POINT);
+        this.point += point;
+        return this.point;
+    }
 }
